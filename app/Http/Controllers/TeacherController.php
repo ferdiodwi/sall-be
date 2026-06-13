@@ -112,12 +112,12 @@ class TeacherController extends Controller
     public function storeVocab(Request $request)
     {
         $request->validate([
-            'module_id' => 'required|uuid|exists:modules,id',
+            'module_id' => 'required|integer|exists:modules,id',
             'level' => 'required|in:beginner,intermediate',
             'word' => 'required|string|max:255',
             'meaning' => 'required|string|max:255',
             'example' => 'nullable|string',
-            'emoji' => 'nullable|string|max:10',
+            'emoji' => 'nullable|string|max:255',
             'category' => 'required|string|max:100',
             'order' => 'required|integer',
         ]);
@@ -141,7 +141,7 @@ class TeacherController extends Controller
             'word' => 'string|max:255',
             'meaning' => 'string|max:255',
             'example' => 'nullable|string',
-            'emoji' => 'nullable|string|max:10',
+            'emoji' => 'nullable|string|max:255',
             'category' => 'string|max:100',
             'order' => 'integer',
         ]);
@@ -252,5 +252,35 @@ class TeacherController extends Controller
         $question->delete();
 
         return response()->json(['message' => 'Pertanyaan berhasil dihapus']);
+    }
+
+    public function uploadImage(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            
+            // Ensure public/uploads directory exists
+            $uploadPath = public_path('uploads');
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
+            }
+            
+            $file->move($uploadPath, $filename);
+            
+            // Return public URL
+            $url = asset('uploads/' . $filename);
+
+            return response()->json([
+                'url' => $url,
+                'message' => 'Gambar berhasil diunggah'
+            ]);
+        }
+
+        return response()->json(['message' => 'Berkas gambar tidak ditemukan'], 400);
     }
 }

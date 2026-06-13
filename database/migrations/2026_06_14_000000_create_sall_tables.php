@@ -13,7 +13,7 @@ return new class extends Migration
     {
         // 1. STUDENTS
         Schema::create('students', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->unsignedBigInteger('id')->primary();
             $table->foreign('id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('xp')->default(0);
             $table->integer('streak')->default(0);
@@ -29,7 +29,7 @@ return new class extends Migration
 
         // 2. TEACHERS
         Schema::create('teachers', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->unsignedBigInteger('id')->primary();
             $table->foreign('id')->references('id')->on('users')->onDelete('cascade');
             $table->string('name');
             $table->json('subjects')->nullable();
@@ -39,7 +39,7 @@ return new class extends Migration
 
         // 3. MODULES
         Schema::create('modules', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->integer('number')->unique();
             $table->string('title');
             $table->string('tagline')->nullable();
@@ -51,8 +51,8 @@ return new class extends Migration
 
         // 4. LEVELS
         Schema::create('levels', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('module_id')->constrained('modules')->onDelete('cascade');
+            $table->id();
+            $table->foreignId('module_id')->constrained('modules')->onDelete('cascade');
             $table->string('level'); // beginner, intermediate
             $table->longText('content_html')->nullable();
             $table->timestamps();
@@ -61,8 +61,8 @@ return new class extends Migration
 
         // 5. VOCAB WORDS
         Schema::create('vocab_words', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('module_id')->constrained('modules')->onDelete('cascade');
+            $table->id();
+            $table->foreignId('module_id')->constrained('modules')->onDelete('cascade');
             $table->string('level'); // beginner, intermediate
             $table->string('word');
             $table->string('meaning');
@@ -75,8 +75,8 @@ return new class extends Migration
 
         // 6. QUIZZES
         Schema::create('quizzes', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('module_id')->nullable()->constrained('modules')->onDelete('cascade');
+            $table->id();
+            $table->foreignId('module_id')->nullable()->constrained('modules')->onDelete('cascade');
             $table->string('level'); // beginner, intermediate, placement
             $table->string('title');
             $table->string('activity_type');
@@ -85,8 +85,8 @@ return new class extends Migration
 
         // 7. QUESTIONS
         Schema::create('questions', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('quiz_id')->constrained('quizzes')->onDelete('cascade');
+            $table->id();
+            $table->foreignId('quiz_id')->constrained('quizzes')->onDelete('cascade');
             $table->string('type'); // vocab, reading, true_false, fill_blank, matching
             $table->text('prompt');
             $table->longText('passage')->nullable();
@@ -98,8 +98,8 @@ return new class extends Migration
 
         // 8. ANSWERS
         Schema::create('answers', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('question_id')->constrained('questions')->onDelete('cascade');
+            $table->id();
+            $table->foreignId('question_id')->constrained('questions')->onDelete('cascade');
             $table->integer('answer_index');
             $table->text('explanation_correct');
             $table->text('explanation_wrong');
@@ -110,18 +110,18 @@ return new class extends Migration
 
         // 9. FEEDBACK
         Schema::create('feedback', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignUuid('question_id')->constrained('questions')->onDelete('cascade');
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('question_id')->constrained('questions')->onDelete('cascade');
             $table->boolean('correct');
             $table->timestamp('shown_at')->useCurrent();
         });
 
         // 10. REVIEWS
         Schema::create('reviews', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('module_id')->constrained('modules')->onDelete('cascade');
-            $table->foreignUuid('author_id')->constrained('users')->onDelete('cascade');
+            $table->id();
+            $table->foreignId('module_id')->constrained('modules')->onDelete('cascade');
+            $table->foreignId('author_id')->constrained('users')->onDelete('cascade');
             $table->integer('rating');
             $table->text('comment')->nullable();
             $table->string('emoji')->nullable();
@@ -133,8 +133,8 @@ return new class extends Migration
 
         // 11. JOURNALS
         Schema::create('journals', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->text('learned')->nullable();
             $table->text('difficult')->nullable();
             $table->text('goal')->nullable();
@@ -143,8 +143,8 @@ return new class extends Migration
 
         // 12. WORD WALL
         Schema::create('word_walls', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('word');
             $table->string('meaning');
             $table->text('example')->nullable();
@@ -156,7 +156,7 @@ return new class extends Migration
 
         // 13. BADGES
         Schema::create('badges', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->string('name')->unique();
             $table->string('emoji');
             $table->text('description');
@@ -166,9 +166,9 @@ return new class extends Migration
 
         // 14. LEADERBOARDS
         Schema::create('leaderboards', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->string('class_id');
-            $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->integer('xp')->default(0);
             $table->string('week_id'); // e.g. 2026-W24
             $table->timestamps();
@@ -177,8 +177,8 @@ return new class extends Migration
 
         // 15. RESOURCES
         Schema::create('resources', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('module_id')->constrained('modules')->onDelete('cascade');
+            $table->id();
+            $table->foreignId('module_id')->constrained('modules')->onDelete('cascade');
             $table->string('type'); // video, audio, worksheet, reading, pdf, docx, pptx
             $table->string('title');
             $table->string('url');
@@ -189,8 +189,8 @@ return new class extends Migration
 
         // 16. WORKSHEETS
         Schema::create('worksheets', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('module_id')->constrained('modules')->onDelete('cascade');
+            $table->id();
+            $table->foreignId('module_id')->constrained('modules')->onDelete('cascade');
             $table->string('title');
             $table->string('file_url')->nullable();
             $table->string('format')->nullable(); // PDF, DOCX, PPTX, HTML
@@ -200,9 +200,9 @@ return new class extends Migration
 
         // 17. WORKSHEET SUBMISSIONS
         Schema::create('worksheet_submissions', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('worksheet_id')->constrained('worksheets')->onDelete('cascade');
-            $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
+            $table->id();
+            $table->foreignId('worksheet_id')->constrained('worksheets')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('file_url')->nullable();
             $table->longText('html_content')->nullable();
             $table->decimal('grade', 5, 2)->nullable();
@@ -215,8 +215,8 @@ return new class extends Migration
 
         // 18. AI FEEDBACK
         Schema::create('ai_feedback', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('weak_topic');
             $table->text('message');
             $table->string('recommended_activity')->nullable();
@@ -226,9 +226,9 @@ return new class extends Migration
 
         // 19. ANALYTICS
         Schema::create('analytics', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->string('class_id');
-            $table->foreignUuid('module_id')->nullable()->constrained('modules')->onDelete('cascade');
+            $table->foreignId('module_id')->nullable()->constrained('modules')->onDelete('cascade');
             $table->decimal('completion_rate', 5, 2)->nullable();
             $table->decimal('avg_score', 5, 2)->nullable();
             $table->json('hard_vocab')->nullable();
@@ -238,8 +238,8 @@ return new class extends Migration
 
         // 20. NOTIFICATIONS
         Schema::create('notifications', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('title');
             $table->text('body');
             $table->boolean('read')->default(false);
@@ -248,7 +248,7 @@ return new class extends Migration
 
         // 21. CHALLENGES
         Schema::create('challenges', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->string('title');
             $table->text('description');
             $table->string('target_type'); // modules_complete, quiz_score, etc.

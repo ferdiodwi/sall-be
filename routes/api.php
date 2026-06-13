@@ -64,5 +64,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/teacher/students', [TeacherController::class, 'getStudents']);
         Route::get('/teacher/students/{id}', [TeacherController::class, 'getStudentDetail']);
         Route::get('/teacher/analytics', [TeacherController::class, 'getAnalytics']);
+        
+        // Image/Asset upload
+        Route::post('/upload', [TeacherController::class, 'uploadImage']);
     });
 });

@@ -110,7 +110,7 @@ class StudentController extends Controller
             'word' => 'required|string|max:255',
             'meaning' => 'required|string|max:255',
             'example' => 'nullable|string',
-            'emoji' => 'nullable|string|max:10',
+            'emoji' => 'nullable|string|max:255',
         ]);
 
         $word = WordWall::create([

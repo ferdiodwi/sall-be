@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Challenge extends Model
 {
-    use HasUuids;
 
     const UPDATED_AT = null;
 

@@ -45,7 +45,7 @@ class ModuleController extends Controller
             'number' => 'required|integer',
             'title' => 'required|string|max:255',
             'tagline' => 'required|string|max:255',
-            'emoji' => 'required|string|max:10',
+            'emoji' => 'required|string|max:255',
             'order' => 'required|integer',
             'published' => 'boolean',
         ]);
@@ -82,7 +82,7 @@ class ModuleController extends Controller
             'number' => 'integer',
             'title' => 'string|max:255',
             'tagline' => 'string|max:255',
-            'emoji' => 'string|max:10',
+            'emoji' => 'string|max:255',
             'order' => 'integer',
             'published' => 'boolean',
         ]);

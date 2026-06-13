@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class WorksheetSubmission extends Model
 {
-    use HasUuids;
 
     protected $table = 'worksheet_submissions';
 
