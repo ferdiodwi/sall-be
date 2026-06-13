@@ -1,0 +1,163 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Quiz;
+use App\Models\Question;
+use App\Models\Answer;
+use App\Models\Student;
+use App\Models\Feedback;
+use App\Models\Leaderboard;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+
+class QuizController extends Controller
+{
+    public function show($id)
+    {
+        $quiz = Quiz::with(['questions.answer'])->find($id);
+
+        if (!$quiz) {
+            return response()->json(['message' => 'Kuis tidak ditemukan'], 404);
+        }
+
+        // Return quiz details
+        return response()->json($quiz);
+    }
+
+    public function submit($id, Request $request)
+    {
+        $request->validate([
+            'answers' => 'required|array', // key: question_id, value: selected index (integer)
+        ]);
+
+        $quiz = Quiz::with('questions.answer')->find($id);
+        if (!$quiz) {
+            return response()->json(['message' => 'Kuis tidak ditemukan'], 404);
+        }
+
+        $user = $request->user();
+        $student = Student::find($user->id);
+
+        if (!$student) {
+            return response()->json(['message' => 'Siswa tidak ditemukan'], 404);
+        }
+
+        $submittedAnswers = $request->answers;
+        $totalQuestions = count($quiz->questions);
+        $correctCount = 0;
+        $results = [];
+
+        foreach ($quiz->questions as $question) {
+            $correctIndex = $question->answer->answer_index;
+            $submittedIndex = $submittedAnswers[$question->id] ?? null;
+            $isCorrect = ($submittedIndex !== null && (int)$submittedIndex === (int)$correctIndex);
+
+            if ($isCorrect) {
+                $correctCount++;
+            }
+
+            // Save feedback log in feedback table
+            Feedback::create([
+                'user_id' => $user->id,
+                'question_id' => $question->id,
+                'correct' => $isCorrect,
+                'shown_at' => Carbon::now(),
+            ]);
+
+            $results[] = [
+                'question_id' => $question->id,
+                'prompt' => $question->prompt,
+                'submitted_index' => $submittedIndex,
+                'correct_index' => $correctIndex,
+                'correct' => $isCorrect,
+                'explanation' => $isCorrect ? $question->answer->explanation_correct : $question->answer->explanation_wrong,
+                'related_vocab' => $question->answer->related_vocab,
+            ];
+        }
+
+        $score = $totalQuestions > 0 ? round(($correctCount / $totalQuestions) * 100) : 0;
+        $xpEarned = $correctCount * 10; // +10 XP per correct answer
+
+        // Apply XP
+        $student->xp += $xpEarned;
+
+        // Streak logic
+        $now = Carbon::now();
+        $lastActive = $student->last_active;
+        if ($lastActive) {
+            $diffInDays = Carbon::parse($lastActive)->startOfDay()->diffInDays($now->startOfDay());
+            if ($diffInDays === 1) {
+                // Active yesterday, increment streak
+                $student->streak += 1;
+            } elseif ($diffInDays > 1) {
+                // Streak broken, reset to 1
+                $student->streak = 1;
+            }
+            // If diff is 0, they were active today, keep current streak
+        } else {
+            $student->streak = 1;
+        }
+        $student->last_active = $now;
+
+        // Check streak badge
+        $currentBadges = $student->badges ?? [];
+        if ($student->streak >= 7 && !in_array('on_fire', $currentBadges)) {
+            $currentBadges[] = 'on_fire';
+            $student->xp += 50; // Bonus 50 XP
+        }
+
+        // Check perfect score badge
+        if ($score === 100 && !in_array('quiz_champion', $currentBadges)) {
+            $currentBadges[] = 'quiz_champion';
+            $student->xp += 50; // Bonus 50 XP
+        }
+
+        // Check if module is completed (only for regular module quizzes)
+        if ($quiz->module_id && $score >= 60) {
+            $completed = $student->modules_completed ?? [];
+            if (!in_array($quiz->module_id, $completed)) {
+                // Check if they completed both beginner & intermediate quizzes
+                // For simplicity, we mark the module as completed if they pass this quiz
+                $completed[] = $quiz->module_id;
+                $student->modules_completed = $completed;
+                $student->xp += 100; // 100 XP for module completion
+
+                // Check bookworm badge (completed 3 modules)
+                if (count($completed) >= 3 && !in_array('bookworm', $currentBadges)) {
+                    $currentBadges[] = 'bookworm';
+                    $student->xp += 150; // Bonus 150 XP
+                }
+            }
+        }
+
+        $student->badges = $currentBadges;
+        $student->save();
+
+        // Update Leaderboard
+        $weekId = Carbon::now()->format('o-\\WW');
+        $leaderboard = Leaderboard::where('user_id', $user->id)->where('week_id', $weekId)->first();
+        if ($leaderboard) {
+            $leaderboard->xp = $student->xp;
+            $leaderboard->save();
+        } else {
+            Leaderboard::create([
+                'class_id' => $user->class_id ?? 'X-Tata Busana 1',
+                'user_id' => $user->id,
+                'xp' => $student->xp,
+                'week_id' => $weekId,
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Kuis berhasil disubmit',
+            'score' => $score,
+            'xp_earned' => $xpEarned,
+            'correct_count' => $correctCount,
+            'total_questions' => $totalQuestions,
+            'streak' => $student->streak,
+            'results' => $results,
+            'badges' => $student->badges,
+        ]);
+    }
+}
