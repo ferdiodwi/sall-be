@@ -38,6 +38,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/leaderboard', [StudentController::class, 'getLeaderboard']);
 
     // Quizzes
+    Route::get('/quizzes/placement', [QuizController::class, 'showPlacement']);
+    Route::post('/quizzes/placement/submit', [QuizController::class, 'submitPlacement']);
     Route::get('/quizzes/{id}', [QuizController::class, 'show']);
     Route::post('/quizzes/{id}/submit', [QuizController::class, 'submit']);
 
@@ -56,6 +58,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/vocab-words/{id}', [TeacherController::class, 'destroyVocab']);
 
         // Quiz Question management
+        Route::post('/quizzes/placement/questions', [TeacherController::class, 'storePlacementQuestion']);
         Route::post('/quizzes/{quiz_id}/questions', [TeacherController::class, 'storeQuestion']);
         Route::put('/questions/{id}', [TeacherController::class, 'updateQuestion']);
         Route::delete('/questions/{id}', [TeacherController::class, 'destroyQuestion']);

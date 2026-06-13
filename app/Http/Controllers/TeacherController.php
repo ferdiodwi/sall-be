@@ -167,6 +167,16 @@ class TeacherController extends Controller
     }
 
     // Manage Questions
+    public function storePlacementQuestion(Request $request)
+    {
+        $quiz = Quiz::where('activity_type', 'placement')->first();
+        if (!$quiz) {
+            return response()->json(['message' => 'Placement quiz tidak ditemukan'], 404);
+        }
+
+        return $this->createQuestion($quiz->id, $request);
+    }
+
     public function storeQuestion($quiz_id, Request $request)
     {
         $quiz = Quiz::find($quiz_id);
@@ -174,6 +184,11 @@ class TeacherController extends Controller
             return response()->json(['message' => 'Kuis tidak ditemukan'], 404);
         }
 
+        return $this->createQuestion($quiz_id, $request);
+    }
+
+    private function createQuestion($quiz_id, Request $request)
+    {
         $request->validate([
             'type' => 'required|in:vocab,reading,true_false,multiple_choice',
             'prompt' => 'required|string',
@@ -184,7 +199,7 @@ class TeacherController extends Controller
             'answer_index' => 'required|integer',
             'explanation_correct' => 'required|string',
             'explanation_wrong' => 'required|string',
-            'related_vocab' => 'nullable|array', // e.g. [{"word":"collar", "meaning":"kerah"}]
+            'related_vocab' => 'nullable|array',
         ]);
 
         $question = Question::create([
