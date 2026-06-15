@@ -61,47 +61,70 @@ class DatabaseSeeder extends Seeder
             'badges' => ['first_step'],
         ]);
 
-        // 2. SEED: 5 Modules
+        // 2. SEED: 7 Modules (with game_type)
         $modules = [
             [
-                'number' => 1,
-                'title' => 'Fashion Vocabulary Builder',
-                'tagline' => 'Kuasai kosakata fashion dasar dalam bahasa Inggris',
-                'emoji' => '👗',
-                'order' => 1,
+                'number'    => 1,
+                'title'     => 'Fashion Vocabulary Builder',
+                'tagline'   => 'Kuasai kosakata fashion dasar dalam bahasa Inggris',
+                'emoji'     => '👗',
+                'order'     => 1,
                 'published' => true,
+                'game_type' => 'card_flip',
             ],
             [
-                'number' => 2,
-                'title' => 'Reading Station',
-                'tagline' => 'Latih kemampuan membaca teks fashion umum',
-                'emoji' => '📖',
-                'order' => 2,
+                'number'    => 2,
+                'title'     => 'Reading Station',
+                'tagline'   => 'Latih kemampuan membaca teks fashion umum',
+                'emoji'     => '📖',
+                'order'     => 2,
                 'published' => true,
+                'game_type' => 'word_blast',
             ],
             [
-                'number' => 3,
-                'title' => 'Fashion Label Reader',
-                'tagline' => 'Pahami setiap simbol dan tulisan di label pakaian',
-                'emoji' => '🏷️',
-                'order' => 3,
+                'number'    => 3,
+                'title'     => 'Fashion Label Reader',
+                'tagline'   => 'Pahami setiap simbol dan tulisan di label pakaian',
+                'emoji'     => '🏷️',
+                'order'     => 3,
                 'published' => true,
+                'game_type' => 'drag_drop',
             ],
             [
-                'number' => 4,
-                'title' => 'Catalogue & Product Description Reader',
-                'tagline' => 'Baca dan pahami katalog serta deskripsi produk fashion',
-                'emoji' => '📋',
-                'order' => 4,
+                'number'    => 4,
+                'title'     => 'Catalogue & Product Description Reader',
+                'tagline'   => 'Baca dan pahami katalog serta deskripsi produk fashion',
+                'emoji'     => '📋',
+                'order'     => 4,
                 'published' => true,
+                'game_type' => 'fashion_runner',
             ],
             [
-                'number' => 5,
-                'title' => 'Technical Instructions Reader',
-                'tagline' => 'Kuasai instruksi teknis menjahit dalam bahasa Inggris',
-                'emoji' => '🔧',
-                'order' => 5,
+                'number'    => 5,
+                'title'     => 'Technical Instructions Reader',
+                'tagline'   => 'Kuasai instruksi teknis menjahit dalam bahasa Inggris',
+                'emoji'     => '🔧',
+                'order'     => 5,
                 'published' => true,
+                'game_type' => 'card_flip',
+            ],
+            [
+                'number'    => 6,
+                'title'     => 'Fashion Trends & Style Guide',
+                'tagline'   => 'Pelajari istilah tren dan gaya fashion terkini',
+                'emoji'     => '✨',
+                'order'     => 6,
+                'published' => true,
+                'game_type' => 'word_blast',
+            ],
+            [
+                'number'    => 7,
+                'title'     => 'Sewing Patterns & Measurements',
+                'tagline'   => 'Pahami pola jahit dan pengukuran tubuh dalam bahasa Inggris',
+                'emoji'     => '📐',
+                'order'     => 7,
+                'published' => true,
+                'game_type' => 'drag_drop',
             ],
         ];
 
@@ -153,13 +176,35 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'module_id' => 5,
-                'level' => 'beginner',
+                'level'     => 'beginner',
                 'content_html' => '<h3>How to Sew a Straight Stitch</h3><p>To start sewing, set up your sewing <b>machine</b>. Thread the <b>needle</b> with a strong sewing <b>thread</b>. Place the fabric under the foot and press the pedal gently to create a clean, <b>straight</b> line of stitches.</p>',
             ],
             [
                 'module_id' => 5,
-                'level' => 'intermediate',
+                'level'     => 'intermediate',
                 'content_html' => '<h3>Inserting a Hidden Zipper</h3><p>To insert a hidden <b>zipper</b>, first press the <b>seam-allowance</b> open with an iron. Align the zipper teeth along the seam line. Cut the fabric on the <b>bias</b> if you need extra flexibility in curved seams. Always check the <b>alignment</b> before sewing the final stitch.</p>',
+            ],
+            // Module 6
+            [
+                'module_id' => 6,
+                'level'     => 'beginner',
+                'content_html' => '<h3>Fashion Trends & Style Basics</h3><p>Fashion trends change every season. A <b>trend</b> is a popular style or look at a specific time. The latest <b>collection</b> from a designer shows the newest styles. A <b>capsule</b> wardrobe is a set of essential clothes that can be mixed and matched easily. Knowing these terms helps you discuss fashion confidently in English.</p>',
+            ],
+            [
+                'module_id' => 6,
+                'level'     => 'intermediate',
+                'content_html' => '<h3>Fashion Forecasting & Consumer Behavior</h3><p>Fashion <b>forecasting</b> is the process of predicting upcoming style trends. Brands study <b>demographics</b> and social media to understand consumer behavior. The concept of <b>fast fashion</b> refers to producing trend-driven clothes rapidly at low cost. Conversely, <b>slow fashion</b> promotes quality over quantity with ethical production methods.</p>',
+            ],
+            // Module 7
+            [
+                'module_id' => 7,
+                'level'     => 'beginner',
+                'content_html' => '<h3>Basic Body Measurements</h3><p>To make clothes that fit well, you need to take accurate <b>measurements</b>. The <b>bust</b> is the fullest part of the chest. The <b>waist</b> is the narrowest part of the torso. The <b>hip</b> is the widest part of the lower body. Always use a flexible <b>tape measure</b> for the most accurate results.</p>',
+            ],
+            [
+                'module_id' => 7,
+                'level'     => 'intermediate',
+                'content_html' => '<h3>Reading & Grading Sewing Patterns</h3><p>A sewing <b>pattern</b> is a template used to cut fabric pieces. Each pattern includes a <b>grainline</b> arrow showing the direction of the fabric grain. <b>Notches</b> are small triangular marks used to match pattern pieces correctly. <b>Grading</b> is the process of adjusting a pattern up or down in size while maintaining its original shape.</p>',
             ],
         ];
 
@@ -282,6 +327,34 @@ class DatabaseSeeder extends Seeder
             [ 'module_id' => 5, 'level' => 'intermediate', 'word' => 'hem', 'meaning' => 'kelim bawah', 'example' => 'Fold the hem twice and sew it.', 'emoji' => '👗', 'category' => 'Technique', 'order' => 3],
             [ 'module_id' => 5, 'level' => 'intermediate', 'word' => 'bias', 'meaning' => 'potongan serong', 'example' => 'Cutting on the bias makes the fabric stretchier.', 'emoji' => '✂️', 'category' => 'Technique', 'order' => 4],
             [ 'module_id' => 5, 'level' => 'intermediate', 'word' => 'alignment', 'meaning' => 'keselarasan jahitan', 'example' => 'Ensure proper alignment of the collar before sewing.', 'emoji' => '📐', 'category' => 'Technique', 'order' => 5],
+
+            // Modul 6 Beginner
+            [ 'module_id' => 6, 'level' => 'beginner', 'word' => 'trend', 'meaning' => 'tren mode', 'example' => 'Floral prints are a popular trend this season.', 'emoji' => '🌸', 'category' => 'General', 'order' => 1],
+            [ 'module_id' => 6, 'level' => 'beginner', 'word' => 'collection', 'meaning' => 'koleksi busana', 'example' => 'The designer released a new summer collection.', 'emoji' => '👒', 'category' => 'General', 'order' => 2],
+            [ 'module_id' => 6, 'level' => 'beginner', 'word' => 'capsule', 'meaning' => 'koleksi pakaian esensial', 'example' => 'A capsule wardrobe has 10 to 20 key pieces.', 'emoji' => '🧳', 'category' => 'Style', 'order' => 3],
+            [ 'module_id' => 6, 'level' => 'beginner', 'word' => 'outfit', 'meaning' => 'pakaian lengkap', 'example' => 'She put together a chic outfit for the event.', 'emoji' => '👗', 'category' => 'Style', 'order' => 4],
+            [ 'module_id' => 6, 'level' => 'beginner', 'word' => 'accessory', 'meaning' => 'aksesori pelengkap', 'example' => 'A belt is a useful fashion accessory.', 'emoji' => '💍', 'category' => 'Style', 'order' => 5],
+
+            // Modul 6 Intermediate
+            [ 'module_id' => 6, 'level' => 'intermediate', 'word' => 'forecasting', 'meaning' => 'peramalan tren', 'example' => 'Fashion forecasting helps brands plan collections ahead.', 'emoji' => '🔮', 'category' => 'Industry', 'order' => 1],
+            [ 'module_id' => 6, 'level' => 'intermediate', 'word' => 'demographics', 'meaning' => 'data demografis konsumen', 'example' => 'Brand demographics show most buyers are aged 18–30.', 'emoji' => '📊', 'category' => 'Industry', 'order' => 2],
+            [ 'module_id' => 6, 'level' => 'intermediate', 'word' => 'fast fashion', 'meaning' => 'mode cepat produksi massal', 'example' => 'Fast fashion brands release new styles every two weeks.', 'emoji' => '⚡', 'category' => 'Industry', 'order' => 3],
+            [ 'module_id' => 6, 'level' => 'intermediate', 'word' => 'slow fashion', 'meaning' => 'mode lambat, etis dan berkualitas', 'example' => 'Slow fashion uses durable fabrics and ethical labor.', 'emoji' => '🌿', 'category' => 'Industry', 'order' => 4],
+            [ 'module_id' => 6, 'level' => 'intermediate', 'word' => 'couture', 'meaning' => 'mode adibusana eksklusif', 'example' => 'Haute couture garments are custom-made by hand.', 'emoji' => '👑', 'category' => 'Industry', 'order' => 5],
+
+            // Modul 7 Beginner
+            [ 'module_id' => 7, 'level' => 'beginner', 'word' => 'measurements', 'meaning' => 'ukuran tubuh', 'example' => 'Take accurate body measurements before cutting fabric.', 'emoji' => '📏', 'category' => 'Sizing', 'order' => 1],
+            [ 'module_id' => 7, 'level' => 'beginner', 'word' => 'bust', 'meaning' => 'lingkar dada', 'example' => 'Measure around the fullest part of your bust.', 'emoji' => '👚', 'category' => 'Sizing', 'order' => 2],
+            [ 'module_id' => 7, 'level' => 'beginner', 'word' => 'waist', 'meaning' => 'lingkar pinggang', 'example' => 'Measure your waist at the narrowest part.', 'emoji' => '🩱', 'category' => 'Sizing', 'order' => 3],
+            [ 'module_id' => 7, 'level' => 'beginner', 'word' => 'hip', 'meaning' => 'lingkar panggul', 'example' => 'Measure your hip at the widest point below the waist.', 'emoji' => '📐', 'category' => 'Sizing', 'order' => 4],
+            [ 'module_id' => 7, 'level' => 'beginner', 'word' => 'tape measure', 'meaning' => 'pita ukur fleksibel', 'example' => 'Use a soft tape measure for body measurements.', 'emoji' => '📏', 'category' => 'Tools', 'order' => 5],
+
+            // Modul 7 Intermediate
+            [ 'module_id' => 7, 'level' => 'intermediate', 'word' => 'pattern', 'meaning' => 'pola jahit', 'example' => 'Trace the dress pattern onto the fabric before cutting.', 'emoji' => '🗂️', 'category' => 'Construction', 'order' => 1],
+            [ 'module_id' => 7, 'level' => 'intermediate', 'word' => 'grainline', 'meaning' => 'arah serat kain', 'example' => 'Always align the grainline parallel to the selvage.', 'emoji' => '↕️', 'category' => 'Construction', 'order' => 2],
+            [ 'module_id' => 7, 'level' => 'intermediate', 'word' => 'notches', 'meaning' => 'tanda takikan pola', 'example' => 'Match the notches on the sleeve to the armhole.', 'emoji' => '✂️', 'category' => 'Construction', 'order' => 3],
+            [ 'module_id' => 7, 'level' => 'intermediate', 'word' => 'grading', 'meaning' => 'gradasi ukuran pola', 'example' => 'Grading a pattern from size 8 to size 12 requires even spacing.', 'emoji' => '📈', 'category' => 'Construction', 'order' => 4],
+            [ 'module_id' => 7, 'level' => 'intermediate', 'word' => 'ease', 'meaning' => 'kelonggaran pakaian', 'example' => 'Add 2 cm of ease to the waist measurement for comfort.', 'emoji' => '🔧', 'category' => 'Construction', 'order' => 5],
         ];
 
         foreach ($vocabWords as $vocab) {
@@ -310,8 +383,16 @@ class DatabaseSeeder extends Seeder
             [ 'module_id' => 4, 'level' => 'intermediate', 'title' => 'Kuis Modul 4: Spesifikasi Activewear Teknis', 'activity_type' => 'quiz'],
 
             // Modul 5
-            [ 'module_id' => 5, 'level' => 'beginner', 'title' => 'Kuis Modul 5: Dasar Jahitan Mesin', 'activity_type' => 'quiz'],
-            [ 'module_id' => 5, 'level' => 'intermediate', 'title' => 'Kuis Modul 5: Pemasangan Zipper Tersembunyi', 'activity_type' => 'quiz'],
+            [ 'module_id' => 5, 'level' => 'beginner',      'title' => 'Kuis Modul 5: Dasar Jahitan Mesin',              'activity_type' => 'quiz'],
+            [ 'module_id' => 5, 'level' => 'intermediate',  'title' => 'Kuis Modul 5: Pemasangan Zipper Tersembunyi',     'activity_type' => 'quiz'],
+
+            // Modul 6
+            [ 'module_id' => 6, 'level' => 'beginner',      'title' => 'Kuis Modul 6: Tren & Gaya Fashion Dasar',         'activity_type' => 'quiz'],
+            [ 'module_id' => 6, 'level' => 'intermediate',  'title' => 'Kuis Modul 6: Industri & Peramalan Mode',          'activity_type' => 'quiz'],
+
+            // Modul 7
+            [ 'module_id' => 7, 'level' => 'beginner',      'title' => 'Kuis Modul 7: Ukuran Tubuh Dasar',                'activity_type' => 'quiz'],
+            [ 'module_id' => 7, 'level' => 'intermediate',  'title' => 'Kuis Modul 7: Pola Jahit & Gradasi',              'activity_type' => 'quiz'],
         ];
 
         foreach ($quizzes as $qz) {
@@ -987,6 +1068,214 @@ class DatabaseSeeder extends Seeder
                 ]
             ],
         ];
+
+        // 7b. SEED: Questions for Module 6 & 7 (quiz IDs 12–15)
+        $mod67QaPairs = [
+            // ===================== QUIZ 12: Modul 6 Beginner =====================
+            [
+                'question' => [
+                    'quiz_id' => 12,
+                    'type' => 'vocab',
+                    'prompt' => 'What is a "trend" in fashion?',
+                    'options' => ['A. A type of fabric', 'B. A popular style at a specific time', 'C. A sewing technique', 'D. A clothing brand'],
+                    'topic' => 'fashion_trends',
+                    'order' => 1,
+                ],
+                'answer' => [
+                    'answer_index' => 1,
+                    'explanation_correct' => 'Benar! Trend adalah gaya atau penampilan yang populer pada waktu tertentu.',
+                    'explanation_wrong' => 'Salah. Trend berarti gaya yang sedang populer, bukan bahan, teknik, atau merek.',
+                    'related_vocab' => [['word' => 'trend', 'meaning' => 'tren mode']],
+                ]
+            ],
+            [
+                'question' => [
+                    'quiz_id' => 12,
+                    'type' => 'vocab',
+                    'prompt' => 'What is a "capsule wardrobe"?',
+                    'options' => ['A. A large wardrobe collection', 'B. A medicine cabinet', 'C. A set of essential clothes that mix and match easily', 'D. A seasonal clothing sale'],
+                    'topic' => 'fashion_trends',
+                    'order' => 2,
+                ],
+                'answer' => [
+                    'answer_index' => 2,
+                    'explanation_correct' => 'Benar! Capsule wardrobe adalah koleksi pakaian esensial yang mudah dipadupadan.',
+                    'explanation_wrong' => 'Salah. Capsule wardrobe bukan koleksi besar, obat, atau penjualan. Itu adalah set pakaian esensial.',
+                    'related_vocab' => [['word' => 'capsule', 'meaning' => 'koleksi pakaian esensial']],
+                ]
+            ],
+            [
+                'question' => [
+                    'quiz_id' => 12,
+                    'type' => 'true_false',
+                    'prompt' => 'An "outfit" means a single piece of clothing, like just a shirt.',
+                    'options' => ['A. True', 'B. False'],
+                    'topic' => 'fashion_terms',
+                    'order' => 3,
+                ],
+                'answer' => [
+                    'answer_index' => 1,
+                    'explanation_correct' => 'Benar! Pernyataan ini SALAH. Outfit berarti pakaian lengkap, bukan satu potong saja.',
+                    'explanation_wrong' => 'Salah. Outfit berarti kombinasi pakaian lengkap dari atas ke bawah, bukan hanya satu helai.',
+                    'related_vocab' => [['word' => 'outfit', 'meaning' => 'pakaian lengkap']],
+                ]
+            ],
+            // ===================== QUIZ 13: Modul 6 Intermediate =====================
+            [
+                'question' => [
+                    'quiz_id' => 13,
+                    'type' => 'vocab',
+                    'prompt' => 'What does "fashion forecasting" mean?',
+                    'options' => ['A. Predicting weather for outdoor fashion shows', 'B. Predicting upcoming style trends', 'C. Tracking clothing sales data', 'D. Designing fast fashion collections'],
+                    'topic' => 'industry_terms',
+                    'order' => 1,
+                ],
+                'answer' => [
+                    'answer_index' => 1,
+                    'explanation_correct' => 'Benar! Fashion forecasting adalah proses memprediksi tren gaya yang akan datang.',
+                    'explanation_wrong' => 'Salah. Forecasting bukan soal cuaca atau data penjualan saja — ini tentang prediksi tren mode.',
+                    'related_vocab' => [['word' => 'forecasting', 'meaning' => 'peramalan tren']],
+                ]
+            ],
+            [
+                'question' => [
+                    'quiz_id' => 13,
+                    'type' => 'vocab',
+                    'prompt' => 'Which term describes clothes produced quickly in large quantities at low cost?',
+                    'options' => ['A. Haute couture', 'B. Slow fashion', 'C. Fast fashion', 'D. Capsule collection'],
+                    'topic' => 'industry_terms',
+                    'order' => 2,
+                ],
+                'answer' => [
+                    'answer_index' => 2,
+                    'explanation_correct' => 'Benar! Fast fashion berarti produksi massal cepat dengan harga murah.',
+                    'explanation_wrong' => 'Salah. Haute couture eksklusif, slow fashion etis, fast fashion lah yang massal dan cepat.',
+                    'related_vocab' => [['word' => 'fast fashion', 'meaning' => 'mode cepat produksi massal']],
+                ]
+            ],
+            [
+                'question' => [
+                    'quiz_id' => 13,
+                    'type' => 'true_false',
+                    'prompt' => '"Slow fashion" prioritizes quality and ethical production over speed and low cost.',
+                    'options' => ['A. True', 'B. False'],
+                    'topic' => 'sustainability',
+                    'order' => 3,
+                ],
+                'answer' => [
+                    'answer_index' => 0,
+                    'explanation_correct' => 'Benar! Slow fashion memang mengutamakan kualitas dan produksi yang etis.',
+                    'explanation_wrong' => 'Salah. Pernyataan ini BENAR. Slow fashion adalah kebalikan dari fast fashion — lebih lambat, lebih etis, lebih berkualitas.',
+                    'related_vocab' => [['word' => 'slow fashion', 'meaning' => 'mode lambat, etis dan berkualitas']],
+                ]
+            ],
+            // ===================== QUIZ 14: Modul 7 Beginner =====================
+            [
+                'question' => [
+                    'quiz_id' => 14,
+                    'type' => 'vocab',
+                    'prompt' => 'Which body measurement refers to the fullest part of the chest?',
+                    'options' => ['A. Waist', 'B. Hip', 'C. Bust', 'D. Shoulder'],
+                    'topic' => 'body_measurements',
+                    'order' => 1,
+                ],
+                'answer' => [
+                    'answer_index' => 2,
+                    'explanation_correct' => 'Benar! Bust adalah lingkar di bagian terlebar dada.',
+                    'explanation_wrong' => 'Salah. Waist = pinggang, Hip = panggul, Bust = bagian terlebar dada.',
+                    'related_vocab' => [['word' => 'bust', 'meaning' => 'lingkar dada']],
+                ]
+            ],
+            [
+                'question' => [
+                    'quiz_id' => 14,
+                    'type' => 'vocab',
+                    'prompt' => 'What tool is used to take flexible body measurements?',
+                    'options' => ['A. Ruler', 'B. Tape measure', 'C. Scissors', 'D. Caliper'],
+                    'topic' => 'tools',
+                    'order' => 2,
+                ],
+                'answer' => [
+                    'answer_index' => 1,
+                    'explanation_correct' => 'Benar! Tape measure (pita ukur) adalah alat fleksibel untuk mengukur tubuh.',
+                    'explanation_wrong' => 'Salah. Ruler kaku, scissors untuk memotong. Tape measure yang tepat untuk ukur tubuh.',
+                    'related_vocab' => [['word' => 'tape measure', 'meaning' => 'pita ukur fleksibel']],
+                ]
+            ],
+            [
+                'question' => [
+                    'quiz_id' => 14,
+                    'type' => 'true_false',
+                    'prompt' => 'The "waist" measurement is taken at the widest part of the lower body.',
+                    'options' => ['A. True', 'B. False'],
+                    'topic' => 'body_measurements',
+                    'order' => 3,
+                ],
+                'answer' => [
+                    'answer_index' => 1,
+                    'explanation_correct' => 'Benar! Pernyataan ini SALAH. Waist diukur di bagian paling sempit (pinggang), bukan terlebar. Hip yang diukur di bagian terlebar.',
+                    'explanation_wrong' => 'Salah. Waist = pinggang (paling sempit). Hip = panggul (paling lebar). Bukan waist.',
+                    'related_vocab' => [['word' => 'waist', 'meaning' => 'lingkar pinggang']],
+                ]
+            ],
+            // ===================== QUIZ 15: Modul 7 Intermediate =====================
+            [
+                'question' => [
+                    'quiz_id' => 15,
+                    'type' => 'vocab',
+                    'prompt' => 'What are "notches" in a sewing pattern?',
+                    'options' => ['A. Types of fabric weave', 'B. Small triangular marks used to match pattern pieces', 'C. Cutting tools', 'D. Seam allowance measurements'],
+                    'topic' => 'pattern_making',
+                    'order' => 1,
+                ],
+                'answer' => [
+                    'answer_index' => 1,
+                    'explanation_correct' => 'Benar! Notches adalah tanda takikan kecil untuk mencocokkan bagian-bagian pola saat menjahit.',
+                    'explanation_wrong' => 'Salah. Notches bukan tenunan, bukan alat potong, bukan kampuh — itu tanda pencocokan pola.',
+                    'related_vocab' => [['word' => 'notches', 'meaning' => 'tanda takikan pola']],
+                ]
+            ],
+            [
+                'question' => [
+                    'quiz_id' => 15,
+                    'type' => 'vocab',
+                    'prompt' => 'What is "ease" in sewing pattern terminology?',
+                    'options' => ['A. The direction of fabric grain', 'B. Extra room added to a measurement for comfort', 'C. A type of stitch', 'D. The process of adjusting pattern sizes'],
+                    'topic' => 'pattern_making',
+                    'order' => 2,
+                ],
+                'answer' => [
+                    'answer_index' => 1,
+                    'explanation_correct' => 'Benar! Ease adalah kelonggaran yang ditambahkan agar pakaian nyaman dipakai.',
+                    'explanation_wrong' => 'Salah. Grain = arah serat, stitch = jahitan, grading = gradasi ukuran. Ease adalah kelonggaran/ruang gerak.',
+                    'related_vocab' => [['word' => 'ease', 'meaning' => 'kelonggaran pakaian']],
+                ]
+            ],
+            [
+                'question' => [
+                    'quiz_id' => 15,
+                    'type' => 'true_false',
+                    'prompt' => '"Grading" a pattern means adjusting its size up or down while keeping its original shape.',
+                    'options' => ['A. True', 'B. False'],
+                    'topic' => 'pattern_making',
+                    'order' => 3,
+                ],
+                'answer' => [
+                    'answer_index' => 0,
+                    'explanation_correct' => 'Benar! Grading adalah proses menaik/menurunkan ukuran pola dengan tetap mempertahankan bentuk aslinya.',
+                    'explanation_wrong' => 'Salah. Pernyataan ini BENAR. Grading = menyesuaikan ukuran pola (naik/turun) sambil menjaga proporsi.',
+                    'related_vocab' => [['word' => 'grading', 'meaning' => 'gradasi ukuran pola']],
+                ]
+            ],
+        ];
+
+        foreach ($mod67QaPairs as $pair) {
+            $question = Question::create($pair['question']);
+            $answerData = $pair['answer'];
+            $answerData['question_id'] = $question->id;
+            Answer::create($answerData);
+        }
+
 
         foreach ($qaPairs as $pair) {
             $question = Question::create($pair['question']);

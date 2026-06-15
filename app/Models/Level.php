@@ -12,6 +12,8 @@ class Level extends Model
         'module_id',
         'level',
         'content_html',
+        'visual_guide_image',
+        'visual_guide_desc',
     ];
 
     public function module()

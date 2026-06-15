@@ -105,56 +105,60 @@ class QuizController extends Controller
         }
 
         $score = $totalQuestions > 0 ? round(($correctCount / $totalQuestions) * 100) : 0;
-        $xpEarned = $correctCount * 10; // +10 XP per correct answer
 
-        // Apply XP
+        // Anti-Cheat: Cek apakah siswa sudah pernah submit kuis ini sebelumnya
+        $firstAttempt = !Feedback::where('user_id', $user->id)
+            ->whereHas('question', function ($q) use ($quiz) {
+                $q->where('quiz_id', $quiz->id);
+            })
+            ->exists();
+
+        $xpEarned = $firstAttempt ? ($correctCount * 10) : 0;
+
+        // Apply XP (hanya jika attempt pertama)
         $student->xp += $xpEarned;
 
-        // Streak logic
+        // Streak logic (tetap jalan di setiap attempt)
         $now = Carbon::now();
         $lastActive = $student->last_active;
         if ($lastActive) {
             $diffInDays = Carbon::parse($lastActive)->startOfDay()->diffInDays($now->startOfDay());
             if ($diffInDays === 1) {
-                // Active yesterday, increment streak
                 $student->streak += 1;
             } elseif ($diffInDays > 1) {
-                // Streak broken, reset to 1
                 $student->streak = 1;
             }
-            // If diff is 0, they were active today, keep current streak
         } else {
             $student->streak = 1;
         }
         $student->last_active = $now;
 
-        // Check streak badge
+        // Badge & bonus XP hanya di attempt pertama
         $currentBadges = $student->badges ?? [];
-        if ($student->streak >= 7 && !in_array('on_fire', $currentBadges)) {
-            $currentBadges[] = 'on_fire';
-            $student->xp += 50; // Bonus 50 XP
-        }
+        if ($firstAttempt) {
+            if ($student->streak >= 7 && !in_array('on_fire', $currentBadges)) {
+                $currentBadges[] = 'on_fire';
+                $student->xp += 50;
+            }
 
-        // Check perfect score badge
-        if ($score === 100 && !in_array('quiz_champion', $currentBadges)) {
-            $currentBadges[] = 'quiz_champion';
-            $student->xp += 50; // Bonus 50 XP
-        }
+            if ($score === 100 && !in_array('quiz_champion', $currentBadges)) {
+                $currentBadges[] = 'quiz_champion';
+                $student->xp += 50;
+            }
 
-        // Check if module is completed (only for regular module quizzes)
-        if ($quiz->module_id && $score >= 60) {
-            $completed = $student->modules_completed ?? [];
-            if (!in_array($quiz->module_id, $completed)) {
-                // Check if they completed both beginner & intermediate quizzes
-                // For simplicity, we mark the module as completed if they pass this quiz
-                $completed[] = $quiz->module_id;
-                $student->modules_completed = $completed;
-                $student->xp += 100; // 100 XP for module completion
+            // Module completion bonus
+            if ($quiz->module_id && $score >= 60) {
+                $completed = $student->modules_completed ?? [];
+                $completionKey = $quiz->module_id . '_' . $quiz->level;
+                if (!in_array($completionKey, $completed)) {
+                    $completed[] = $completionKey;
+                    $student->modules_completed = $completed;
+                    $student->xp += 100;
 
-                // Check bookworm badge (completed 3 modules)
-                if (count($completed) >= 3 && !in_array('bookworm', $currentBadges)) {
-                    $currentBadges[] = 'bookworm';
-                    $student->xp += 150; // Bonus 150 XP
+                    if (count($completed) >= 3 && !in_array('bookworm', $currentBadges)) {
+                        $currentBadges[] = 'bookworm';
+                        $student->xp += 150;
+                    }
                 }
             }
         }
@@ -177,7 +181,17 @@ class QuizController extends Controller
             ]);
         }
 
-        return $this->processSubmit($quiz, $request);
+        return response()->json([
+            'message' => $firstAttempt ? 'Kuis berhasil disubmit' : 'Kuis dikerjakan ulang (XP tidak ditambah)',
+            'score' => $score,
+            'xp_earned' => $xpEarned,
+            'first_attempt' => $firstAttempt,
+            'correct_count' => $correctCount,
+            'total_questions' => $totalQuestions,
+            'streak' => $student->streak,
+            'results' => $results,
+            'badges' => $student->badges,
+        ]);
     }
 
     private function processSubmit($quiz, $request)

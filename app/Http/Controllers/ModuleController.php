@@ -48,6 +48,7 @@ class ModuleController extends Controller
             'emoji' => 'required|string|max:255',
             'order' => 'required|integer',
             'published' => 'boolean',
+            'game_type' => 'nullable|string|in:card_flip,word_blast,drag_drop,fashion_runner',
         ]);
 
         $module = Module::create($request->all());
@@ -85,6 +86,7 @@ class ModuleController extends Controller
             'emoji' => 'string|max:255',
             'order' => 'integer',
             'published' => 'boolean',
+            'game_type' => 'nullable|string|in:card_flip,word_blast,drag_drop,fashion_runner',
         ]);
 
         $module->update($request->all());
@@ -129,23 +131,79 @@ class ModuleController extends Controller
         $request->validate([
             'level' => 'required|in:beginner,intermediate',
             'content_html' => 'required|string',
+            'visual_guide_image' => 'nullable|string',
+            'visual_guide_desc' => 'nullable|string',
         ]);
 
         $level = Level::where('module_id', $id)->where('level', $request->level)->first();
         
+        $data = [
+            'content_html' => $request->content_html,
+            'visual_guide_image' => $request->visual_guide_image,
+            'visual_guide_desc' => $request->visual_guide_desc,
+        ];
+
         if (!$level) {
-            $level = Level::create([
-                'module_id' => $id,
-                'level' => $request->level,
-                'content_html' => $request->content_html,
-            ]);
+            $data['module_id'] = $id;
+            $data['level'] = $request->level;
+            $level = Level::create($data);
         } else {
-            $level->update(['content_html' => $request->content_html]);
+            $level->update($data);
         }
 
         return response()->json([
             'message' => 'Konten level berhasil disimpan',
             'level' => $level,
+        ]);
+    }
+
+    public function complete(Request $request, $id)
+    {
+        $user = $request->user();
+        if ($user->role !== 'student') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $level = $request->input('level', 'beginner'); // 'beginner' or 'intermediate'
+        $student = $user->student;
+        $completed = $student->modules_completed ?? [];
+        
+        $completionKey = $id . '_' . $level;
+
+        if (!in_array($completionKey, $completed)) {
+            $completed[] = $completionKey;
+            $student->modules_completed = $completed;
+            $student->xp += 50; // Bonus XP for completing a module explicitly
+            
+            // Check for bookworm badge
+            $currentBadges = $student->badges ?? [];
+            if (count($completed) >= 3 && !in_array('bookworm', $currentBadges)) {
+                $currentBadges[] = 'bookworm';
+                $student->badges = $currentBadges;
+                $student->xp += 150;
+            }
+            
+            $student->save();
+            
+            // Update Leaderboard
+            $weekId = \Carbon\Carbon::now()->format('o-\WW');
+            $leaderboard = \App\Models\Leaderboard::where('user_id', $user->id)->where('week_id', $weekId)->first();
+            if ($leaderboard) {
+                $leaderboard->xp += 50;
+                $leaderboard->save();
+            } else {
+                \App\Models\Leaderboard::create([
+                    'user_id' => $user->id,
+                    'class_id' => $user->class_id,
+                    'xp' => 50,
+                    'week_id' => $weekId,
+                ]);
+            }
+        }
+
+        return response()->json([
+            'message' => 'Module marked as completed',
+            'modules_completed' => $completed
         ]);
     }
 }

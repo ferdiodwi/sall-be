@@ -113,8 +113,22 @@ class StudentController extends Controller
             'emoji' => 'nullable|string|max:255',
         ]);
 
+        $userId = $request->user()->id;
+
+        // Cek duplikat: kata yang sama sudah ada di Word Wall user ini
+        $existing = WordWall::where('user_id', $userId)
+            ->whereRaw('LOWER(word) = ?', [strtolower($request->word)])
+            ->first();
+
+        if ($existing) {
+            return response()->json([
+                'message' => 'Kosakata ini sudah ada di Word Wall kamu.',
+                'word' => $existing,
+            ], 409);
+        }
+
         $word = WordWall::create([
-            'user_id' => $request->user()->id,
+            'user_id' => $userId,
             'word' => $request->word,
             'meaning' => $request->meaning,
             'example' => $request->example,
@@ -122,22 +136,6 @@ class StudentController extends Controller
             'status' => 'learning',
             'review_history' => [],
         ]);
-
-        // Award student 5 XP for adding a word!
-        $student = Student::find($request->user()->id);
-        if ($student) {
-            $student->xp += 5;
-            
-            // Check if vocabulary_master badge requirement met
-            $wordWallCount = WordWall::where('user_id', $request->user()->id)->count();
-            $currentBadges = $student->badges ?? [];
-            if ($wordWallCount >= 50 && !in_array('vocabulary_master', $currentBadges)) {
-                $currentBadges[] = 'vocabulary_master';
-                $student->badges = $currentBadges;
-                $student->xp += 50; // Bonus 50 XP
-            }
-            $student->save();
-        }
 
         return response()->json([
             'message' => 'Kata berhasil ditambahkan ke Word Wall',

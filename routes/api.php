@@ -5,6 +5,7 @@ use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 // 1. PUBLIC ROUTES
@@ -23,6 +24,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // Modules
     Route::get('/modules', [ModuleController::class, 'index']);
     Route::get('/modules/{id}', [ModuleController::class, 'show']);
+    Route::post('/modules/{id}/complete', [ModuleController::class, 'complete']);
+    Route::get('/modules/{id}/reviews', [ReviewController::class, 'index']);
+    Route::post('/modules/{id}/reviews', [ReviewController::class, 'store']);
+    Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
 
     // Word Wall
     Route::get('/word-wall', [StudentController::class, 'getWordWall']);
@@ -51,6 +56,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/modules/{id}', [ModuleController::class, 'destroy']);
         Route::post('/modules/{id}/toggle-publish', [ModuleController::class, 'togglePublish']);
         Route::put('/modules/{id}/level-content', [ModuleController::class, 'updateLevelContent']);
+        Route::post('/reviews/{id}/reply', [ReviewController::class, 'reply']);
 
         // Vocab management
         Route::post('/vocab-words', [TeacherController::class, 'storeVocab']);

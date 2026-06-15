@@ -13,6 +13,7 @@ class Module extends Model
         'emoji',
         'order',
         'published',
+        'game_type',
     ];
 
     protected $casts = [
@@ -42,5 +43,10 @@ class Module extends Model
     public function worksheets()
     {
         return $this->hasMany(Worksheet::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 }
